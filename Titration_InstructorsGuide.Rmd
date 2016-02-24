@@ -1,0 +1,239 @@
+---
+title: "Introduction to Acid-Base Titrations: Instructor's Guide"
+author: "David T. Harvey"
+date: "February 20, 2016"
+output: 
+  pdf_document:
+    fig_height: 3
+    fig_width: 5
+---
+## Introduction
+This learning module provides an introduction to acid-base titrimetry that is suitable for an introductory course in analytical chemistry. It is assumed that students are comfortable with stoichiometric calculations, particularly as they apply to the reactions of acids and bases during a titration, and that they appreciate the difference between a titration's equivalence point and its end point. The module consists of five investigations:
+
+* Investigation 1: Titration of a Strong Acid or Strong Base
+* Investigation 2: Titration of a Monoprotic Weak Acid or Weak Base
+* Investigation 3: Titration of a Diprotic Weak Acid or Weak Base
+* Investigation 4: Titration of a Mixture of Weak Acids or Weak Bases
+* Investigation 5: Practice Problems--Designing Titrations
+
+The learning module is programmed in R ([www.r-project.org](https://www.r-project.org/)) using the `Shiny` package, which allows for interactive features. Each investigation includes a brief introduction and some suggestions of things to explore and/or questions to answer. The controls, which consist of a combination of radio buttons and sliders, allow the user to choose the chemical form of the analyte and, by default, the titrant, along with their concentrations, and, where appropriate, to specify p${K}_{a}$ or p${K}_{b}$ values. Additional controls are available to adjust the limits for the volume axis and to overlay the pH range for selected indicators. The resulting titration curve is updated with each change in a control's value.
+
+The purpose of this document is to provide instructors with additional background on the program's features and to summarize some general observations regarding each investigation. 
+
+Two additional notes regarding the representation of indicators. First, to display an indicator's colors, the program applies a linear gradient between the color of the indicator's acid form and the color of its base form. Because the actual gradient likely is not linear and the perception of color is different between individuals, the actual colors will not match exactly the colors as displayed; nevertheless, the display is sufficient for our purposes. Second, the color gradient is set to a transparency of about 60% so that the titration curve remains visible; although this is the case when displayed on the screen or when printing from within the program, when prepared in pdf format, as is the case in this document, the indicator's color gradient is not transparent---nevertheless, the shape of the titration curve is evident. 
+
+## Background Details on the Method Used to Calculate Titration Curves
+The titration curves displayed in each investigation are plotted using the R package `titrationCurves`, which contains functions for calculating and plotting titration curves, including those for a wide variety of acid-base reactions, for metal-EDTA complexation reactions, for redox reactions where the titrant is an oxidizing agent, and for precipitation reactions. The package includes functions to plot normal (pH vs. volume of titrant) and derivative titration curves, although only the former are used in this learning module.
+
+For an acid-base titration, each available function uses a single master equation to calculate the volume of titrant needed to achieve a desired pH, as outlined in Robert de Levie's *Principles of Quantitative Chemical Analysis* (McGraw-Hill, 1997). Because a function calculates the volume of titrant needed to achieve a fixed pH, the titration curve's first point can deviate significantly from a volume of zero; should this surprise students---whose experiences in lab, after all, will reasonably lead them to expect an initial pH when ${V}_\textrm{titrant}$ is 0.00 mL---a simple explanation of how the titration curves are calculated should be sufficient to alleviate any concerns. You will find additional details on the package at [CRAN](https://cran.r-project.org/web/packages/titrationCurves/index.html) or on [Github](https://github.com/dtharvey/titrationCurves).
+
+## Investigation 1: Titration of a Strong Acid or Strong Base
+Students should recognize that the three variables in this simulation---the titrant's concentration, the analyte's concentration, and the initial volume of the analyte's solution---determine the location of the titration curve's equivalence point along the *x*-axis and have little effect on the shape of the titration curve other than a small increase in $\Delta$pH for higher concentrations of strong acid and/or strong base. Of the available indicators, the most suitable across a range of concentrations are methyl red, bromothymol blue, cresol red, thymol blue (its second, more basic end point), and phenolphthalein. A typical example of a titration curve is shown below for the titration of 25.0 mL of 0.10 M strong acid using 0.10 M strong base as the titrant and bromothymol blue as an indicator.
+
+```{r echo = FALSE}
+library(titrationCurves)
+library(shape)
+load(file = "indicator.RData")
+out = sa_sb(conc.acid = 0.1, conc.base = 0.1, vol.acid = 25, plot = FALSE, eqpt = FALSE,
+            overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+ind.color = colorRampPalette(colors = c(acidColor[3], baseColor[3]), alpha = TRUE)(100)
+filledrectangle(mid = c(25,(acidLimit[3] + baseLimit[3])/2), 
+      wx = 50, wy = baseLimit[3] - acidLimit[3], col = ind.color)
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+
+## Investigation 2: Titration of a Monoprotic Weak Acid or Weak Base
+Students should recognize that three of the variables in this simulation---the titrant's concentration, the analyte's concentration, and the initial volume of the analyte's solution---determine the location of the titration curve's equivalence point along the *x*-axis, and that the fourth variable---the weak acid analyte's p${K}_{a}$ value or the weak base analyte's p${K}_{b}$ value---determines the pH and the $\Delta$pH at the equivalence point. 
+
+For a weak acid analyte, bromothymol blue, cresol red, thymol blue (its second, more basic end point), and phenolphthalein are suitable indicators when the analyte's p${K}_{a}$ value is 3, as shown here for the titration of 25.0 mL of a 0.10 M weak acid using 0.10 M NaOH as the titrant and cresol red as the indicator
+
+```{r, echo = FALSE}
+out = wa_sb(conc.acid = 0.1, conc.base = 0.1, vol.acid = 25, pka = 3, plot = FALSE, 
+            eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+ind.color = colorRampPalette(colors = c(acidColor[4], baseColor[4]), alpha = TRUE)(100)
+filledrectangle(mid = c(25,(acidLimit[4] + baseLimit[4])/2), 
+      wx = 50, wy = baseLimit[4] - acidLimit[4], col = ind.color)
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+but that only aliziran yellow R is suitable when the p${K}_{a}$ value is 9, although the width of the equivalence point along the volume axis is such that precision will suffer if we rely on a change in the indicator's color instead of recording and using the titration curve itself. 
+
+```{r, echo = FALSE}
+out = wa_sb(conc.acid = 0.1, conc.base = 0.1, vol.acid = 25, pka = 9, plot = FALSE, 
+            eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+ind.color = colorRampPalette(colors = c(acidColor[8], baseColor[8]), alpha = TRUE)(100)
+filledrectangle(mid = c(25,(acidLimit[8] + baseLimit[8])/2), 
+      wx = 50, wy = baseLimit[8] - acidLimit[8], col = ind.color)
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+As shown below for the titration of 25.0 mL of a 0.10 M weak acid with a p${K}_{a}$ of 10 using 0.10 M NaOH as the titrant, if a weak acid analyte's p${K}_{a}$ is much greater than 9, the change in pH at the equivalence point is too spread out to allow for precise results even if we record and use the titration curve itself. 
+
+```{r, echo = FALSE}
+out = wa_sb(conc.acid = 0.1, conc.base = 0.1, vol.acid = 25, pka = 10, plot = FALSE, 
+            eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+Similar observations hold for weak base analytes where bromophenol blue, methyl red, bromothymol blue, and cresol red are suitable indicators when the analyte's p${K}_{b}$ value is 3, but only bromophenol blue is suitable when the p${K}_{b}$ value is 7. When a weak base analyte's p${K}_{b}$ value is much greater than 9, the change in pH at the equivalence point is too spread out to allow for precise results.
+
+## Investigation 3: Titration of a Diprotic Weak Acid or Weak Base
+Students should recognize that three of the variables in this simulation---the titrant's concentration, the analyte's concentration, and the initial volume of the analyte's solution---determine the location of the titration curve's two equivalence point along the *x*-axis and that the fourth and fifth variables---the weak acid analyte's two p${K}_{a}$ values or the weak base analyte's two p${K}_{b}$ values---determine the pH and the $\Delta$pH at the two equivalence points.
+
+For a diprotic weak acid analyte, the shape of the titration curve depends on the individual p${K}_{a}$ values and the difference, $\Delta$p${K}_{a}$, between them; for example, shown below are three titration curves, the first for the titration of 35 mL of a 0.10 M solution of a diprotic weak acid with p${K}_{a}$ values of 2 and 5, (a $\Delta$pH of 3) using 0.20 M NaOH as the titrant
+
+```{r, echo = FALSE}
+out = diwa_sb(conc.acid = 0.1, conc.base = 0.2, vol.acid = 35, pka1 = 2, pka2 = 5, 
+              plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+the second for titration of a diprotic weak acid with the same $\Delta$pH of 3, but with p${K}_{a}$ values of 4 and 7
+
+```{r, echo = FALSE}
+out = diwa_sb(conc.acid = 0.1, conc.base = 0.2, vol.acid = 35, pka1 = 4, pka2 = 7, 
+              plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+and the third for the titration of the diprotic weak acid with a $\Delta$pH of 5, but with p${K}_{a}$ values of 2 and 7.
+
+```{r, echo = FALSE}
+out = diwa_sb(conc.acid = 0.1, conc.base = 0.2, vol.acid = 35, pka1 = 2, pka2 = 7, 
+              plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+Comparing the three titration curves, we see that the total change in pH is the same for all three, but is divided up differently between the two equivalence points; for example we see that $\Delta$pH for the first equivalence point is the same for the first two titration curves, which have identical $\Delta$p${K}_{a}$ values, but that $\Delta$pH for the second equivalence point is more substantial for the analyte with the larger value for p${K}_{a2}$.
+
+Students should recognize that although there is little visible evidence of the first equivalence point when $\Delta$pH is less than 3---as shown below for the titration of 35 mL of a weak acid with p${K}_{a}$ values of 4 and 6 using 0.20 M NaOH as the titrant and phenolphthalein as an indicator---one good end point is all that is needed for a quantitative analysis.
+
+```{r, echo = FALSE}
+out = diwa_sb(conc.acid = 0.1, conc.base = 0.2, vol.acid = 35, pka1 = 4, pka2 = 6, 
+              plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+ind.color = colorRampPalette(colors = c(acidColor[5], baseColor[5]), alpha = TRUE)(100)
+filledrectangle(mid = c(25,(acidLimit[5] + baseLimit[5])/2), 
+      wx = 50, wy = baseLimit[5] - acidLimit[5], col = ind.color)
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+## Investigation 4: Titration of a Mixture of Weak Acids or Weak Bases
+Students should recognize that four of the variables in this simulation---the titrant's concentration, the first analyte's concentration, the second analyte's concentration, and the initial volume of the analyte's solution---determine the location of the titration curve's two equivalence points along the *x*-axis, and that the fifth and six variables---each weak acid analyte's p${K}_{a}$ value or each weak base analyte's  p${K}_{b}$ value---determine the pH and the $\Delta$pH for the two equivalence points.
+
+For a mixture of two weak acid analytes, the ability to see two distinct equivalence points depends on the difference between their respective p${K}_{a}$ values, with $\Delta$pH for the first equivalence point determined by the difference in their p${K}_{a}$ values, $\Delta$p${K}_{a}$, and $\Delta$pH for the second equivalence point determined by the value of p${K}_{a}$ for the weaker of the two weak acids; for example, here is the titration curve for 35 mL of two weak acids with p${K}_{a}$ values of 3 and 6 and concentrations of 0.050 M and 0.10 M using 0.20 M NaOH as the titrant
+
+```{r, echo = FALSE}
+out = wamix_sb(conc.acid1 = 0.05, conc.acid2 = 0.15, conc.base = 0.2, vol.acid = 35, 
+               pka1 = 2, pka2 = 6, plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+and the titration curve when the two weak acids have p${K}_{a}$ values of 3 and 7.
+
+```{r, echo = FALSE}
+out = wamix_sb(conc.acid1 = 0.05, conc.acid2 = 0.15, conc.base = 0.2, vol.acid = 35, 
+               pka1 = 3, pka2 = 7, plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+Students should recognize that there is little visible evidence of the first equivalence point when $\Delta$pH is less than 3, as shown below for a weak acid with p${K}_{a}$ values of 4 and 6, which makes it impossible to determine the concentration of the stronger of the two weak acids and, as a result, the concentration of the weaker of the two weak acids (although it is possible to determine the total weak acid acidity!).
+
+```{r, echo = FALSE}
+out = wamix_sb(conc.acid1 = 0.1, conc.acid2 = 0.1, conc.base = 0.2, vol.acid = 35, 
+               pka1 = 4, pka2 = 6, plot = FALSE, eqpt = FALSE, overlay = FALSE)
+plot(out, xlim = c(0, 50), ylim = c(0, 14), xaxp = c(0, 50, 10), xaxs = "i", yaxs = "i", 
+     type = "l", lwd = 2, col = "blue", xlab = "volume of titrant (mL)", ylab = "pH")
+grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
+```
+
+## Investigation 5: Practice Problems--Designing Titrations
+There are many different solutions to these problems that stay within the constraints of the simulations and that use less than 50 mL of titrant. What follows are some general observations for each problem.
+
+**Problem 1.** Although the analyte is a weak base, the titration is between the strong acid, HCl, and a strong base, NaOH. A 0.10-g sample will contain at least 0.095 g of guanine, or at least $6.3\times{10}^{-4}$ mol of guanine. If we add this to 25 mL of 0.12 M HCl, then there are at least $3.0\times{10}^{-3} - 6.3\times{10}^{-4} = 2.4\times{10}^{-3}$ mol HCl in excess. Titrating with 0.10 M NaOH will require no more than approximately 25 mL to reach the equivalence point. Bromothymol blue is a suitable indicator for this titration.
+
+The percentage of guanine in the sample is
+
+$$ \%\textrm{purity} = \frac { \textrm{mol guanine} }{ \textrm{g sample} } \times 100 $$
+
+$$ \%\textrm{purity} =\frac { \left( \textrm{mol HCl} - \textrm{mol NaOH} \right)  }{ \textrm{g sample} } \times 100 $$
+
+$$ \%\textrm{purity} =\frac { { M }_{ \textrm{HCl} }{ V }_{ \textrm{HCl} }-{ M }_{ \textrm{NaOH} }{ V }_{ \textrm{NaOH} } }{ \textrm{g sample} }\times 100 $$
+
+**Problem 2.** The molar concentration of acetic acid in vinegar is between 0.67 M and 1.33 M. If we dilute 10 mL of vinegar to 50 mL---which gives a molarity between 0.13 M and 0.26 M---and take a 25 mL sample, then titrating with 0.20 M NaOH will require between 17 and 34 mL to reach the equivalence point. Using acetic acid's p${K}_{a}$ of 4.76 and the values above to model the titration curve suggests that the second end point for thymol blue is a suitable indicator.
+
+Knowing that ${\textrm{mol CH}}_{3}\textrm{COOH} = \textrm{mol NaOH}$ at the equivalence point, the %w/v ${\textrm{CH}}_{3}\textrm{COOH}$ in the vinegar, as analyzed, is
+
+$$ \% {\textrm{w/v CH}}_{3}\textrm{COOH} = \frac{ {\textrm{g CH}}_{3}\textrm{COOH}}{{V}_{\textrm{sample}}} = \frac{ {\textrm{mol CH}}_{3}\textrm{COOH}\times\textrm{FW}}{{V}_{\textrm{sample}}}  $$
+
+$$ \% {\textrm{w/v CH}}_{3}\textrm{COOH} = \frac{\textrm{mol NaOH}\times\textrm{FW}} {{V}_{\textrm{sample}}} = \frac{{M}_{\textrm{NaOH}}{V}_{\textrm{NaOH}}\times\textrm{FW}} {{V}_{\textrm{sample}}}  $$
+
+where FW is the formula weight for acetic acid. Given the initial dilution of 10 mL to 50 mL, the actual concentration of ${\textrm{CH}}_{3}\textrm{COOH}$ in the original sample of vinegar is $5\times$ greater.
+
+**Problem 3.** The molar concentration of ammonia in the original product approximately is between 3 M and 6 M. If we dilute 10 mL to 250 mL---which gives a molarity of roughly 0.12 M to 0.24 M---and take a 25 mL sample, then titrating with 0.20 M NaOH will require between 15 mL and 30 mL to reach the equivalence point. Using ammonia's p${K}_{b}$ of 4.76 and the values above to model the titration curve suggests that methyl red is a suitable indicator.
+
+Knowing that ${\textrm{mol NH}}_{3} = \textrm{mol HCl}$ at the equivalence point, the %w/v ${\textrm{NH}}_{3}$ in the cleaner is
+
+$$ \% {\textrm{w/v NH}}_{3} = \frac{\textrm{g N} {\textrm{H}}_{3}}{{V}_{\textrm{sample}}} = \frac{\textrm{mol N} {\textrm{H}}_{3}\times\textrm{FW}}{{V}_{\textrm{sample}}} $$
+
+$$  \% {\textrm{w/v NH}}_{3}= \frac{\textrm{mol NaOH}\times\textrm{FW}} {{V}_{\textrm{sample}}} = \frac{{M}_{\textrm{NaOH}}{V}_{\textrm{NaOH}}\times\textrm{FW}} {{V}_{\textrm{sample}}} $$
+
+where FW is the formula weight for ammonia. Given the initial dilution of 10 mL to 250 mL, the actual concentration of ${\textrm{NH}}_{3}$ in the original sample of cleaner is $25\times$ greater.
+
+**Problem 4.** With p${K}_{a}$ values of 3.04 and 4.37, students will find that the titration curve has but one clear end point for the titration of tartaric acid's second ${\textrm{H}}^{+}$. Given its range of purity, dissolving 1 g of sample in 100 mL gives a solution that is between 0.054 M and 0.064 M in tartaric acid; titrating a 25 mL portion of this solution with 0.10 M NaOH will require about 26--30 mL to reach the cresol red endpoint.
+
+Knowing that $\textrm{mol tartaric acid} = 0.5\times\textrm{mol NaOH}$ at the equivalence point, the percentage of tartaric acid in the sample is
+
+$$ \textrm{\% tartaric acid} = \frac{\textrm{g tartaric acid}} {\textrm{g sample}\times0.25}\times 100 = \frac{\textrm{mol tartaric acid} \times \textrm{FW}} {\textrm{g sample}\times0.25}\times 100$$
+
+$$ \textrm{\% tartaric acid} = \frac{0.5 \times \textrm{mol NaOH} \times \textrm{FW}} {\textrm{g sample}\times0.25}\times 100 =  \frac{0.5 \times {M}_{\textrm{NaOH}} {V}_{\textrm{NaOH}} \times \textrm{FW}} {\textrm{g sample}\times0.25}\times 100 $$
+
+where FW is the formula weight for tartaric acid and the factor of 0.25 in the denominator accounts for the fact that we analyzed just 25% of the original sample, as prepared.
+
+**Problem 5.** With p${K}_{b}$ values of 3.67 and 7.65, students will find that the titration curve has two clear end points, although the second one has a slightly larger $\Delta$pH. Given its range of purity, dissolving 2 g of sample in 100 mL gives a solution that is between 0.057 M and 0.075 M in ${\textrm{CO}}_{3}^{2-}$; titrating a 20 mL portion of this solution with 0.10 M NaOH will require about 22--30 mL to reach the second equivalence point using bromophenol blue to signal the end point.
+
+Knowing that ${\textrm{mol Na}}_{2}{\textrm{CO}}_{3} = 0.5\times\textrm{mol HCl}$ at the equivalence point, the percentage of ${\textrm{Na}}_{2}{\textrm{CO}}_{3}$ in the sample is
+
+$$ \%\textrm{w/w}= \frac {{\textrm{g Na}}_{2}{\textrm{CO}}_{3}} {\textrm{g sample}\times0.20}\times 100 =  \frac {{\textrm{mol Na}}_{2}{\textrm{CO}}_{3}\times\textrm{FW}} {\textrm{g sample}\times0.20}\times 100 $$
+
+$$ \%\textrm{w/w}= \frac{0.5 \times \textrm{mol NaOH} \times \textrm{FW}} {\textrm{g sample}\times0.20}\times 100 =  \frac{0.5 \times {M}_{\textrm{NaOH}} {V}_{\textrm{NaOH}} \times \textrm{FW}} {\textrm{g sample}\times0.20}\times 100$$
+
+where FW is the formula weight for ${\textrm{Na}}_{2}{\textrm{CO}}_{3}$ and the factor of 0.20 in the denominator accounts for the fact that we analyzed just 20% of the original sample, as prepared.
+
+**Problem 6.** With a p${K}_{a}$ values of 4.76 for acetic acid and of 9.24 for the ammonium ion, students will find that both analytes have suitable equivalence points with bromothymol blue serving as a suitable indicator for the titration of acetic acid and alizarin yellow R serving as a suitable indicator for the titration of the ammonium ion. As these titrations must be completed separately, students can tailor the conditions for each analyte.
+
+For the titration of acetic acid, diluting 50 mL of sample to 100 mL brings the concentration, now at 0.10--0.20 M, within the limits imposed by the simulation. Titrating a 25 mL sample using 0.20 M NaOH will require 12--20 mL to reach the end point. For the titration of the ammonium ion, diluting 25 mL of sample to 100 mL brings its concentration into the range 0.125--0.175 M (and brings the concentration of acetic acid into the range 0.05--0.08 M). Titrating a 25 mL sample using 0.20 M NaOH will require 22--35 mL to reach the alizarin yellow R end point.
+
+Knowing that for the first titration, $\textrm{mol NaOH} = {\textrm{mol CH}}_{3}\textrm{COOH}$, the concentration of acetic acid in the sample as analyzed is
+
+$$ \left[{\textrm{CH}}_{3}\textrm{COOH}\right] = \frac{{\textrm{mol CH}}_{3}\textrm{COOH}} {{V}_{\textrm{sample}}} = \frac{\textrm{mol NaOH}} {{V}_{\textrm{sample}}} = \frac{{M}_{\textrm{NaOH}}{V}_{\textrm{NaOH}}} {{V}_{\textrm{sample}}} $$
+
+Given the initial dilution of 50 mL to 100 mL, the actual concentration of acetic acid in the original sample is $2\times$ greater.
+
+For the second titration, we know that $\textrm{mol NaOH} = {\textrm{mol CH}}_{3}\textrm{COOH} + {\textrm{mol NH}}_{4}^{+}$; thus
+
+$$ \left[{\textrm{NH}}_{4}^{+}\right] = \frac{\textrm{mol NaOH}-{\textrm{mol CH}}_{3}\textrm{COOH}} {{V}_{\textrm{sample}}}$$
+
+$$ \left[{\textrm{NH}}_{4}^{+}\right] = \frac{{M}_{\textrm{NaOH}}{V}_{\textrm{NaOH}} - {M}_{\textrm{AA}}{V}_{\textrm{sample}}\times0.25} {{V}_{\textrm{sample}}}  $$
+
+where ${M}_{\textrm{AA}}$ is the molar concentration of acetic acid in the original sample and the factor of 0.25 accounts for the fact that we diluted 25 mL of the original solution to 100 mL. This concentration of ${\textrm{NH}}_{4}^{+}$ is that in the sample as analyzed; given that we diluted 25 mL of the original sample to 100 mL, the actual concentration is $4\times$ greater.
