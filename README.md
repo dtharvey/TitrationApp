@@ -17,3 +17,9 @@ consist of a combination of radio buttons and sliders, allow the user to choose 
 titrant, along with their concentrations, and, where appropriate, to specify pKa or pKb values. Additional controls are 
 available to adjust the limits for the volume axis and to overlay the pH range for selected indicators. The resulting titration curve 
 is updated with each change in a control's value.
+
+You can launch the learning module from R using the Shiny package by typing
+
+shiny::runGitHub("TitrationApp","dtharvey")
+
+in the console.
