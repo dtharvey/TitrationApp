@@ -1,0 +1,10 @@
+name: TitrationApp
+account: dthdpu
+server: shinyapps.io
+appId: 85734
+bundleId: 381959
+url: https://dthdpu.shinyapps.io/TitrationApp/
+when: 1456586406.29414
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Titration_InstructorsGuide.pdf|Titration_InstructorsGuide.Rmd
