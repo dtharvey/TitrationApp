@@ -16,6 +16,11 @@ shinyUI(fluidPage(
                   font-size: 18px;
                   }
 
+                  h5 {
+                  font-size: 16px;
+                  font-weight: bold;
+                  }
+
                   ")),
   
   tabsetPanel(
@@ -26,7 +31,7 @@ shinyUI(fluidPage(
              column(
                width = 10,
                offset = 1,
-               h1("Introduction to Acid-Base Titrations", 
+               h1("Designing an Acid-Base Titration", 
                   align = "center"),
                br(),
                HTML("<p>Most introductory courses in chemistry include a
@@ -40,7 +45,8 @@ shinyUI(fluidPage(
                     contains the analyte, and the volume of titrant 
                     needed to reach the stoichiometric equivalence point 
                     is determined using a visual indicator whose change 
-                    in color signals the titration's end point; if all 
+                    in color signals the titration's end point or by 
+                    monitoring the pH of the reaction mixture; if all 
                     is well, the difference between the experimental 
                     end point and the theoretical equivalence point is 
                     sufficiently small that it does not affect the 
@@ -67,19 +73,20 @@ shinyUI(fluidPage(
                     <h4>Investigation 4: Titration of a Mixture of Weak
                       Acids or Weak Bases</h4>
                     <li>
-                    <h4>Investigation 5: Practive Problems—Designing
+                    <h4>Investigation 5: Practice Problems—Designing
                       Titrations</h4>
                     </li>
                     </ul>"),
                HTML("<p>In the first four investigations you will explore
-                    the effect on a titration curve of the analyte's and
-                    the titrant's properties, including variables such as
-                    concentration and p<em>K<sub>a</em></sub> or 
-                    p<em>K<sub>b</sub></em> values. You also will consider
-                    the utility of acid-base indicators in signaling a 
+                    the effect on a titration curve of the analyte's 
+                    properties and the titrant's properties, including 
+                    variables such as concentration and 
+                    p<em>K<sub>a</em></sub> or p<em>K<sub>b</sub></em> 
+                    values. You also will consider the utility of 
+                    acid-base indicators in signaling a 
                     titration's end point. The last investigation provides
-                    you with the opportunity to design a titration to 
-                    solve a particular analytical problem.</p>"),
+                    you with the opportunity to design several titrations 
+                    to solve particular analytical problems.</p>"),
                HTML("<p>For a more detailed discussion of the topics
                     covered in this learning module, you can consult 
                     Chapter 9 of <em>Analytical Chemistry 2.0</em>, 
@@ -93,54 +100,84 @@ shinyUI(fluidPage(
     tabPanel("Investigation 1",
              fluidRow(
                column(
-                 width = 5, offset = 1,
-                 h4("Titration of a Strong Acid or Strong Base"),
-                 helpText("For the titration of a strong acid 
-                      with a strong base, or for the titration of
-                      a strong base with a strong acid, 
-                      the shape and the position of the resulting 
-                      titration curve is a function of three 
-                      variables:"),
-                 helpText(HTML("<ul>
-                      <li>the analyte's concentration
-                      </li>
-                      <li>the initial volume of the analyte's solution
-                      </li>
-                      <li>the titrant's concentration
-                      </li>
-                      </ul>")),
-                 helpText("Using the controls below and the resulting
-                      titration curve displayed on the right, explore 
-                      the effect of each variable on the shape and  
-                      the position of the titration curve for a strong 
-                      acid analyte and for a strong base analyte. To what 
-                      extent, if any, do the three variables interact 
-                      to determine the shape and/or 
-                      the position of the titration curve? If you choose
-                      to use an indicator to signal the titration's end
-                      point, what factors affect your selection of an 
-                      indicator? In the absence of a suitable indicator,
-                      does the change in pH at the equivalence point 
-                      allow for a useful quantitative analysis?")
+                 width = 4, 
+                 h4("Titration of a Strong Acid or a Strong Base"),
+                 helpText(
+                  "For the titration of a strong acid analyte or a 
+                  strong base analyte, the shape and the position of the 
+                  resulting titration curve is a function of three 
+                  variables: the analyte's initial concentration, the 
+                  initial volume of the analyte's solution, and the 
+                  titrant's concentration."
+                  ),
+                 helpText(
+                  "The controls below allow you to define the conditions 
+                  for the titration, including the option to include 
+                  a visual indicator and to control the range of 
+                  titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
+                  the resulting titration curve is shown on the far 
+                  right. As you consider the effect of each variable on 
+                  the titration curve, be sure to explore fully the range 
+                  of possible values for each variable and the 
+                  interaction between the variables."
+                 )
                ),
                column(
-                 width = 5,
-                 align = "left",
+                 width = 4,
+                 h4("Questions"),
+                 helpText(
+                  "1. Explain how the three variables, both individually 
+                  and collectively, determine the titration curve's shape, 
+                  the location of the equivalence point along the 
+                  \\(\\textit{x}\\)-axis, and the change in pH at the 
+                  equivalence point."
+                  ),
+                 helpText(
+                  "2. Which indicators are suitable for signaling the 
+                  titration's end point? Explain your reasoning."),
+                 helpText(
+                  "3. In the absence of an indicator, is the change in 
+                  pH at the equivalence point sufficient for a useful 
+                  quantitative analysis? Explain your reasoning.")
+               ),
+               column(
+                 width = 4,
                  plotOutput("plot_1a", height = "350px")
                )
              ),
              fluidRow(
                column(
                  width = 3,
-                 align = "left",
-                 radioButtons("radio_1a", "Analyte is...",
-                              choices = c("Strong Acid", "Strong Base"),
-                              selected = "Strong Acid", inline = TRUE),
-                 radioButtons("radio_1b", "Range of volumes...",
+                 h5("Analyte"),
+                 radioButtons("radio_1a", label = NULL,
+                              choices = c("strong acid", "strong base"),
+                              selected = "strong acid", inline = TRUE),
+                 sliderInput("slider_1a", "initial [analyte] (M)", 
+                             min = 0.001, max = 0.25, step = 0.001, 
+                             value = 0.10, ticks = FALSE),
+                 sliderInput("slider_1d", "initial volume (mL)", 
+                             min = 1, max = 50, value = 50, 
+                             ticks = FALSE)
+               ),
+               column(
+                 width = 3,
+                 h5("Titrant"),
+                 helpText("To manually set the titrant's concentration,
+                          uncheck the checkbox."),
+                 checkboxInput("checkbox_1a", "[titrant] = initial 
+                               [analyte]?", value = TRUE),
+                 sliderInput("slider_1b", "[titrant] (M)", min = 0.001,
+                             max = 0.25, step = 0.001, value = 0.10, 
+                             ticks = FALSE),
+                 radioButtons("radio_1b", "Range of titrant volumes...",
                               choices = c("0 to 200 mL", "0 to 100 mL",
                                           "0 to 50 mL"), selected = 
-                                "0 to 200 mL", inline = TRUE),
-                 radioButtons("radio_1c", "Indicator is...", choices =
+                                "0 to 100 mL", inline = TRUE)
+                 ),
+               column(
+                 width = 3,
+                 h5("Indicator"),
+                 radioButtons("radio_1c", "", choices =
                                 c("none",
                                   "thymol blue: 1.2-2.8",
                                   "bromophenol blue: 3.0-4.6",
@@ -151,22 +188,7 @@ shinyUI(fluidPage(
                                   "phenolphthalein: 8.3-10.0",
                                   "alizarin yellow R: 10.1-12.0"),
                               selected = "none")
-               ),
-               column(
-                 width = 3,
-                 helpText("Adjust titrant's concentration and  
-                          initial volume of the analyte's solution."),
-                 sliderInput("slider_1b", "[titrant] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.10),
-                 sliderInput("slider_1d", "initial volume (mL)", 
-                             min = 5, max = 50, value = 50)
-               ),
-               column(
-                 width = 3,
-                 helpText("Adjust  analyte's initial concentration."),
-                 sliderInput("slider_1a", "[analyte] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.25)
-                 )
+               )
                ),
                column(
                  width = 3
@@ -178,42 +200,53 @@ shinyUI(fluidPage(
     tabPanel("Investigation 2",
              fluidRow(
                column(
-                 width = 5, offset = 1,
+                 width = 4,
                  h4("Titration of a Monoprotic Weak Acid or Weak Base"),
-                 helpText("For the titration of a monoprotic weak acid 
-                      with a strong base, or for the titration of
-                      a monoprotic weak base with a strong acid, 
-                      the shape and the position of the resulting 
-                      titration curve is a function of four 
-                      variables:"),
-                 helpText(HTML("<ul>
-                      <li>the concentration of the analyte
-                      </li>
-                      <li>the initial volume of the analyte
-                      </li>
-                      <li>the concentration of the titrant
-                      </li>
-                      <li>the analyte's p<em>K<sub>a</em></sub> 
-                        value or its p<em>K<sub>b</sub></em> value
-                      </li>
-                      </ul>")),
-                 helpText("Using the controls below and the resulting
-                      titration curve displayed on the right, explore 
-                      the effect of each variable on the shape and  
-                      the position of the titration curve for a weak 
-                      acid analyte and for a weak base analyte. To what 
-                      extent, if any, do the four variables interact 
-                      to determine the shape and/or 
-                      the position of the titration curve? If you choose
-                      to use an indicator to signal the titration's end
-                      point, what factors affect your selection of an 
-                      indicator? In the absence of a suitable indicator,
-                      does the change in pH at the equivalence point 
-                      allow for a useful quantitative analysis?")
+                 helpText(
+                  "For the titration of a monoprotic weak acid analyte 
+                  or  the titration of a monoprotic weak base analyte, 
+                  the shape and the position of the resulting titration 
+                  curve is a function of four variables: the analyte's 
+                  initial concentration, the initial volume of the analyte's
+                  solution, the concentration of the titrant, and the 
+                  analyte's \\(\\textrm{p}{K}_{a}\\) value or its 
+                  \\(\\textrm{p}{K}_{b}\\) value."
+                  ),
+                 helpText(
+                  "The controls below allow you to define the conditions 
+                  for the titration, including the option to include 
+                  a visual indicator and to control the range of 
+                  titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
+                  the resulting titration curve is shown on the far 
+                  right. As you consider the effect of each variable on 
+                  the titration curve, be sure to explore fully the range 
+                  of possible values for each variable and the 
+                  interaction between the variables."
+                 )
                  ),
                column(
-                 width = 5,
-                 align = "left",
+                 width = 4,
+                 h4("Questions"),
+                 helpText(
+                   "1. Explain how the four variables, both individually 
+                   and collectively, determine the titration curve's shape, 
+                   the location of the equivalence point along the 
+                   \\(\\textit{x}\\)-axis, and the change in pH at the 
+                   equivalence point. In what ways is the titration 
+                   curve for a weak acid or weak base similar to and 
+                   different from the titration curve for a strong acid
+                   or a stong base?"
+                 ),
+                 helpText(
+                   "2. Which indicators are suitable for signaling the 
+                   titration's end point? Explain your reasoning."),
+                 helpText(
+                   "3. In the absence of an indicator, is the change in 
+                   pH at the equivalence point sufficient for a useful 
+                   quantitative analysis? Explain your reasoning.")
+               ),
+               column(
+                 width = 4,
                  plotOutput("plot_2a", height = "350px")
                )
                ), 
@@ -221,15 +254,39 @@ shinyUI(fluidPage(
              fluidRow(
                column(
                  width = 3,
-                 align = "left",
-                 radioButtons("radio_2a", "Analyte is...",
-                              choices = c("Weak Acid", "Weak Base"),
-                              selected = "Weak Acid", inline = TRUE),
+                 h5("Analyte"),
+                 radioButtons("radio_2a", label = NULL, 
+                              choices = c("weak acid", "weak base"),
+                              selected = "weak acid", inline = TRUE),
+                 sliderInput("slider_2c", "p\\({K}_{a}\\) or 
+                             p\\({K}_{b}\\)", min = 2, max = 12,
+                             step = 0.01, value = 7, ticks = FALSE),
+                 sliderInput("slider_2a", "initial [analyte] (M)", 
+                             min = 0.001, max = 0.25, step = 0.001, 
+                             value = 0.10, ticks = FALSE),
+                 sliderInput("slider_2d", "initial volume (mL)", 
+                             min = 1, max = 50, value = 50, 
+                             ticks = FALSE)
+               ),
+               column(
+                 width = 3,
+                 h5("Titrant"),
+                 helpText("To manually set the titrant's concentration,
+                          uncheck the checkbox."),
+                 checkboxInput("checkbox_2a", "[titrant] = initial 
+                               [analyte]?", value = TRUE),
+                 sliderInput("slider_2b", "[titrant] (M)", min = 0.001,
+                             max = 0.25, step = 0.001, value = 0.1,
+                             ticks = FALSE),
                  radioButtons("radio_2b", "Range of volumes...",
                               choices = c("0 to 200 mL", "0 to 100 mL",
                                           "0 to 50 mL"), selected = 
-                                "0 to 200 mL", inline = TRUE),
-                 radioButtons("radio_2c", "Indicator is...", choices =
+                                "0 to 100 mL", inline = TRUE)
+               ),
+               column(
+                 width = 3,
+                 h5("Indicator"),
+                 radioButtons("radio_2c", "", choices =
                                 c("none",
                                   "thymol blue: 1.2-2.8",
                                   "bromophenol blue: 3.0-4.6",
@@ -240,26 +297,6 @@ shinyUI(fluidPage(
                                   "phenolphthalein: 8.3-10.0",
                                   "alizarin yellow R: 10.1-12.0"),
                               selected = "none")
-               ),
-               column(
-                 width = 3,
-                 helpText("Adjust  titrant's concentration and  
-                          initial volume of the analyte's solution."),
-                 sliderInput("slider_2b", "[titrant] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.10),
-                 sliderInput("slider_2d", "initial volume (mL)", 
-                             min = 5, max = 50, value = 50)
-               ),
-               column(
-                 width = 3,
-                 helpText(HTML("Adjust  analyte's initial concentration 
-                      and its p<em>K<sub>a</sub></em> or its 
-                      p<em>K<sub>b</sub></em> value.")),
-                 sliderInput("slider_2a", "[analyte] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.25),
-                 sliderInput("slider_2c", "p\\({K}_{a}\\) or 
-                             p\\({K}_{b}\\)", min = 2, max = 12,
-                             step = 0.01, value = 7)
                ),
                column(
                  width = 3
@@ -273,43 +310,50 @@ shinyUI(fluidPage(
     tabPanel("Investigation 3",
              fluidRow(
                column(
-                 width = 5, offset = 1,
+                 width = 4,
                  h4("Titration of a Diprotic Weak Acid or Weak Base"),
-                 helpText("For the titration of a diprotic weak acid 
-                      with a strong base, or for the titration of
-                      a diprotic weak base with a strong acid, 
-                      the shape and the position of the resulting 
-                      titration curve is a function of five 
-                      variables:"),
-                 helpText(HTML("<ul>
-                      <li>the analyte's concentration
-                      </li>
-                      <li>the initial volume of the analyte's solution
-                      </li>
-                      <li>the titrant's concentration
-                      </li>
-                      <li>the analyte's two p<em>K<sub>a</em></sub> 
-                      values or its two p<em>K<sub>b</sub></em> values
-                      </li>
-                      </ul>")),
-                 helpText("Using the controls below and the resulting
-                      titration curve displayed on the right, explore 
-                      the effect of each variable on the shape and  
-                      the position of the titration curve for a diprotic  
-                      weak acid analyte and for a diprotic weak base 
-                      analyte. To what extent, if any, do the five 
-                      variables interact to determine 
-                      the shape and/or the position of the titration 
-                      curve? If you choose
-                      to use an indicator to signal the titration's end
-                      point, what factors affect your selection of an 
-                      indicator? In the absence of a suitable indicator,
-                      does the change in pH at the equivalence point 
-                      allow for a useful quantitative analysis?")
+                 helpText(
+                  "For the titration of a diprotic weak acid or a 
+                  diprotic weak, the shape and the position 
+                  of the resulting titration curve is a function of 
+                  five variables: the analyte's initial concentration, 
+                  the initial volume of the analyte's solution, the 
+                  analyte's two \\(\\textrm{p}{K}_{a}\\) values or its
+                  two \\(\\textrm{p}{K}_{b}\\) values, and the 
+                  titrant's concentration"),
+                 helpText(
+                  "The controls below allow you to define the conditions 
+                  for the titration, including the option to include 
+                  a visual indicator and to control the range of 
+                  titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
+                  the resulting titration curve is shown on the far 
+                  right. As you consider the effect of each variable on 
+                  the titration curve, be sure to explore fully the range 
+                  of possible values for each variable and the 
+                  interaction between the variables."
+                  )
                  ),
                column(
-                 width = 5,
-                 align = "left",
+                 width = 4,
+                 h4("Questions"),
+                 helpText(
+                   "1. Explain how the five variables, both individually 
+                   and collectively, determine the titration curve's shape, 
+                   the location of the equivalence points along the 
+                   \\(\\textit{x}\\)-axis, and the change in pH at the 
+                   equivalence points."
+                 ),
+                 helpText(
+                   "2. Which indicators are suitable for signaling the 
+                   titration's two end points? Explain your reasoning."),
+                 helpText(
+                   "3. In the absence of an indicator, is the change in 
+                   pH at the equivalence points sufficient for a useful 
+                   quantitative analysis? Explain your reasoning."
+                   )
+               ),
+               column(
+                 width = 4,
                  plotOutput("plot_3a", height = "350px")
                )
                  ), 
@@ -317,15 +361,47 @@ shinyUI(fluidPage(
              fluidRow(
                column(
                  width = 3,
-                 align = "left",
-                 radioButtons("radio_3a", "Analyte is...",
-                              choices = c("Weak Acid", "Weak Base"),
-                              selected = "Weak Acid", inline = TRUE),
+                 h5("Analyte"),
+                 radioButtons("radio_3a", label = NULL,
+                              choices = c("weak acid", "weak base"),
+                              selected = "weak acid", inline = TRUE),
+                 sliderInput("slider_3c", "p\\({K}_{a}\\) or 
+                             p\\({K}_{b}\\) values", min = 2, max = 12,
+                             step = 0.01, value = c(5, 9), tick = FALSE),
+                 helpText(
+                  "The slider's ends correspond to the two
+                   p\\({K}_{a}\\) values or to the two p\\({K}_{b}\\) 
+                  values."
+                  ),
+                 sliderInput("slider_3a", "initial [analyte] (M)", 
+                             min = 0.001, max = 0.25, step = 0.001, 
+                             value = 0.10, ticks = FALSE),
+                 sliderInput("slider_3d", "initial volume (mL)", 
+                             min = 1, max = 50, value = 25, 
+                             ticks = FALSE)
+                 ),
+               column(
+                 width = 3,
+                 h5("Titrant"),
+                 helpText(
+                   "To manually set the titrant's concentration, 
+                   uncheck the checkbox."
+                 ),
+                 checkboxInput("checkbox_3a", 
+                               "[titrant] = initial [analyte]?", 
+                               value = TRUE),
+                 sliderInput("slider_3b", "[titrant] (M)", min = 0.001,
+                             max = 0.25, step = 0.001, value = 0.10,
+                             ticks = FALSE),
                  radioButtons("radio_3b", "Range of volumes...",
                               choices = c("0 to 200 mL", "0 to 100 mL",
                                           "0 to 50 mL"), selected = 
-                                "0 to 200 mL", inline = TRUE),
-                 radioButtons("radio_3c", "Indicator is...", choices =
+                                "0 to 100 mL", inline = TRUE)
+                 ),
+               column(
+                 width = 3,
+                 h5("Indicator"),
+                 radioButtons("radio_3c", "", choices =
                                 c("none",
                                   "thymol blue: 1.2-2.8",
                                   "bromophenol blue: 3.0-4.6",
@@ -335,35 +411,9 @@ shinyUI(fluidPage(
                                   "thymol blue: 8.0-9.6",
                                   "phenolphthalein: 8.3-10.0",
                                   "alizarin yellow R: 10.1-12.0"),
-                              selected = "none")
+                              selected = "none"
+                              )
                ),
-               column(
-                 width = 3,
-                 helpText("Adjust  titrant's concentration and  
-                      initial volume of analyte's solution."),
-                 sliderInput("slider_3b", "[titrant] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.10),
-                 sliderInput("slider_3d", "initial volume (mL)", 
-                             min = 5, max = 50, value = 25)
-                 ),
-               column(
-                 width = 3,
-                 helpText(HTML("Adjust  analyte's initial 
-                      concentration and its p<em>K<sub>a</sub></em> or 
-                      its p<em>K<sub>b</sub></em> values. The slider's 
-                      two ends correspond to the two
-                      p<em>K<sub>a</sub></em> values or to the two 
-                      p<em>K<sub>b</sub></em> values. If you click on the 
-                      slider between the limits, you can change both
-                      p<em>K<sub>a</sub></em> or p<em>K<sub>b</sub></em>
-                      values while maintaining a fixed difference
-                      between them.</p>")),
-                 sliderInput("slider_3a", "[analyte] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.25),
-                 sliderInput("slider_3c", "p\\({K}_{a}\\) or 
-                             p\\({K}_{b}\\) values", min = 2, max = 12,
-                             step = 0.01, value = c(5, 9))
-                 ),
                column(
                  width = 3
                )         
@@ -375,60 +425,111 @@ shinyUI(fluidPage(
     tabPanel("Investigation 4",
              fluidRow(
                column(
-                 width = 5, offset = 1,
+                 width = 4,
                  h4("Titration of a Mixture of Weak Acids or Weak Bases"),
-                 helpText("For the titration of a mixture that contains
-                      two monoprotic weak acids, or for the titration of
-                      a mixture that contains two monoprotic weak bases,
-                      the shape and the position of the resulting 
-                      titration curve is a function of six 
-                      variables:"),
-                 helpText(HTML("<ul>
-                      <li>the first analyte's and the second analyte's 
-                          concentration
-                      <li>the initial volume of the solution that
-                      contains the two analytes
-                      </li>
-                      <li>the titrant's concentration
-                      </li>
-                      <li>the p<em>K<sub>a</em></sub> 
-                      values or the p<em>K<sub>b</sub></em> values 
-                      for the two analytes
-                      </li>
-                      </ul>")),
-                 helpText("Using the controls below and the resulting
-                      titration curve displayed on the right, explore 
-                      the effect of each variable on the shape and  
-                      the position of the titration curve for a   
-                      mixture of weak acid analytes and for a mixture 
-                      of weak base analytes. To what extent, if any, 
-                      do the six variables interact to 
-                      determine the shape and/or the position of the 
-                      titration curve? If you choose
-                      to use an indicator to signal the titration's end
-                      point, what factors affect your selection of an 
-                      indicator? In the absence of a suitable indicator,
-                      does the change in pH at the equivalence point 
-                      allow for a useful quantitative analysis?")
+                 helpText(
+                  "For the titration of a mixture that contains two 
+                  monoprotic weak acids two monoprotic weak bases, the 
+                  shape and the position of the resulting titration 
+                  curve is a function of six variables: the first 
+                  analyte's and the second analyte's concentration, the 
+                  initial volume of the solution that contains the two
+                  analytes, the p\\({K}_{a}\\) values or the 
+                  p\\({K}_{b}\\) for the two analytes, and the 
+                  titrant's concentration"
+                 ),
+                 helpText(
+                  "The controls below allow you to define the conditions 
+                  for the titration, including the option to include 
+                  a visual indicator and to control the range of 
+                  titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
+                  the resulting titration curve is shown on the far 
+                  right. As you consider the effect of each variable on 
+                  the titration curve, be sure to explore fully the range 
+                  of possible values for each variable and the 
+                  interaction between the variables."
+                )
                ),
                column(
-                 width = 5,
-                 align = "left",
+                 width = 4,
+                 h4("Questions"),
+                 helpText(
+                   "1. Explain how the six variables, both individually 
+                   and collectively, determine the titration curve's shape, 
+                   the location of the two equivalence points along the 
+                   \\(\\textit{x}\\)-axis, and the change in pH at the 
+                   equivalence points. In what ways is the titration 
+                   curve for a mixture of two weak acids or two weak 
+                   bases similar to and different from the titration 
+                   curve for a diprotic weak acid or weak base?"
+                 ),
+                 helpText(
+                    "2. Which indicators are suitable for signaling the 
+                    titration's two end points? Explain your reasoning."),
+                 helpText(
+                   "3. In the absence of an indicator, is the change in 
+                    pH at the two equivalence points sufficient for a 
+                    useful quantitative analysis? Explain your reasoning."
+                 )
+               ),
+               column(
+                 width = 4,
                  plotOutput("plot_4a", height = "350px")
                )
              ),
              fluidRow(
                column(
                  width = 3,
-                 align = "left",
-                 radioButtons("radio_4a", "Analytes are...",
-                              choices = c("Weak Acids", "Weak Bases"),
-                              selected = "Weak Acids", inline = TRUE),
+                 h5("Analytes"),
+                 radioButtons("radio_4a", label = NULL,
+                              choices = c("weak acids", "weak bases"),
+                              selected = "weak acids", inline = TRUE),
+                 sliderInput("slider_4a", "initial [first analyte] (M)", 
+                             min = 0.001, max = 0.25, step = 0.001, 
+                             value = 0.10, ticks = FALSE),
+                 sliderInput("slider_4c", "first analyte's p\\({K}_{a}\\) 
+                              or p\\({K}_{b}\\) value", min = 2, 
+                             max = 12, step = 0.01, 
+                             value = 5, ticks = FALSE)
+                 ),
+               column(
+                 width = 3,
+                 br(),
+                 br(),
+                 sliderInput("slider_4d", "initial volume (mL)", 
+                             min = 1, max = 50, value = 25, 
+                             ticks = FALSE),
+                 sliderInput("slider_4e", "initial [second analyte] (M)", 
+                            min = 0.001, max = 0.25, step = 0.001, 
+                            value = 0.10, ticks = FALSE),
+                 sliderInput("slider_4f", "second analyte's p\\({K}_{a}\\) 
+                              or p\\({K}_{b}\\) value", min = 2, 
+                             max = 12, step = 0.01, value = 9,
+                             ticks = FALSE)
+                 ),
+               column(
+                 width = 3,
+                 h5("Titrant"),
+                 helpText(
+                   "To manually set the titrant's concentration, 
+                   uncheck the checkbox."
+                 ),
+                 checkboxInput("checkbox_4a", 
+                               "[titrant] = initial [first analyte]?", 
+                               value = TRUE),
+                 sliderInput("slider_4b", "[titrant (M)]", min = 0.001, 
+                             max = 0.25, step = 0.001, value = 0.10,
+                             ticks = FALSE),
                  radioButtons("radio_4b", "Range of volumes...",
                               choices = c("0 to 200 mL", "0 to 100 mL",
                                           "0 to 50 mL"), selected = 
-                                "0 to 200 mL", inline = TRUE),
-                 radioButtons("radio_4c", "Indicator is...", choices =
+                                "0 to 100 mL", inline = TRUE)
+                 
+                ),
+               column(
+                 width = 3,
+                 h5("Indicator"),
+                 radioButtons("radio_4c", "", choices =
                                 c("none",
                                   "thymol blue: 1.2-2.8",
                                   "bromophenol blue: 3.0-4.6",
@@ -439,38 +540,7 @@ shinyUI(fluidPage(
                                   "phenolphthalein: 8.3-10.0",
                                   "alizarin yellow R: 10.1-12.0"),
                               selected = "none")
-               ),
-               column(
-                 width = 3,
-                 helpText("Adjust  titrant's concentration  
-                      and the initial volume of the analyte's solution."),
-                 sliderInput("slider_4b", "[titrant] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.10),
-                 sliderInput("slider_4d", "initial volume (mL)", 
-                             min = 5, max = 50, value = 25)
-                 ),
-               column(
-                 width = 3,
-                 helpText(HTML("Adjust first analyte's initial 
-                      concentration and its p<em>K<sub>a</sub></em> or 
-                      its p<em>K<sub>b</sub></em> value.")),
-                 sliderInput("slider_4a", "[analyte] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.25),
-                 sliderInput("slider_4c", "p\\({K}_{a}\\) or 
-                             p\\({K}_{b}\\) value", min = 2, max = 12,
-                             step = 0.01, value = 5)
-                 ),
-               column(
-                 width = 3,
-                 helpText(HTML("Adjust second analyte's initial 
-                      concentration and its p<em>K<sub>a</sub></em> or 
-                      its p<em>K<sub>b</sub></em> value.")),
-                 sliderInput("slider_4e", "[analyte] (M)", min = 0.05,
-                             max = 0.25, step = 0.005, value = 0.25),
-                 sliderInput("slider_4f", "p\\({K}_{a}\\) or 
-                             p\\({K}_{b}\\) value", min = 2, max = 12,
-                             step = 0.01, value = 9)
-                )
+               )
              )
     ),
     
@@ -481,83 +551,79 @@ shinyUI(fluidPage(
                column(
                  width = 10,
                  h4("Practice Problems—Designing Titrations"),
-                 helpText("For each of the following problems, design
-                          an acid-base titration that will allow you to 
-                          determine the analyte's concentration. You 
-                          can use the controls in Investigations 1-4
-                          to help you determine a suitable set of 
-                          conditions. In addition to any constraints 
-                          included within each problem and any constraints
-                          imposed by the controls in Investigations 1-4, 
-                          your procedure must require no more than 50 mL
-                          of titrant and must use an initial volume of
-                          analyte of at least 25 mL. Assume you have 
-                          access to the full range of volumetric 
-                          glassware. Use your textbook, or other 
-                          resources, to look up equilibrium constants. 
-                          If you can use an indicator to signal the end
-                          point, then identify the indicator you will 
-                          use; if not, then note that it is necessary
-                          to monitor pH and record the titration curve. 
-                          Prepare your answers in the form of a written 
-                          procedure and explain how to calculate the
-                          analyte's concentration."),
+                 helpText(
+                  "For each of the following problems, design an 
+                  acid-base titration that will allow you to 
+                  determine the analyte's concentration. You can use 
+                  the controls in Investigations 1-4 to help you 
+                  determine a suitable set of conditions. In addition 
+                  to any constraints included within each problem, and 
+                  any constraints imposed by the controls in 
+                  Investigations 1-4, your procedure must require no 
+                  more than 50 mL of titrant and must use an initial 
+                  volume of analyte of at least 25 mL. Assume you have 
+                  access to the full range of volumetric glassware. 
+                  Use your textbook, or other resources, to look up 
+                  equilibrium constants. If you can use an indicator 
+                  to signal the end point, then identify the indicator 
+                  you will use; if not, then note that it is necessary
+                  to monitor pH and record the titration curve. 
+                  Prepare your answers in the form of a written 
+                  procedure and explain how to calculate the
+                  analyte's concentration."
+                  ),
                  br(),
-                 helpText(HTML("<b>Problem 1.</b> The monoprotic weak
-                               base guanine, C<sub>5</sub>H<sub>5</sub>
-                               N<sub>5</sub>O, is insoluble in water
-                               but fully soluble in acid. One way to 
-                               determine the purity of guanine is to
-                               add a known amount to an excess of HCl
-                               and to then determine the amount of
-                               unreacated HCl by titrating it with a
-                               standard solution of NaOH. Propose a
-                               set of conditions that will allow you
-                               to determine the purity of guanine;
-                               you may assume that the samples are at
-                               least 95% guanine.")),
+                 helpText(HTML(
+                  "<b>Problem 1.</b> The monoprotic weak base guanine, 
+                  C<sub>5</sub>H<sub>5</sub>N<sub>5</sub>O, is insoluble 
+                  in water but fully soluble in acid. One way to 
+                  determine the purity of guanine is to add a known 
+                  amount to an excess of HCl and to then determine the 
+                  amount of unreacated HCl by titrating it with a
+                  standard solution of NaOH. Propose a set of conditions 
+                  that will allow you to determine the purity of guanine;
+                  you may assume that the samples have a purity that 
+                  is at least 95% guanine.")),
                  br(),
-                 helpText(HTML("<b>Problem 2.</b> The vinegar in your
-                               kitchen is a dilute solution of acetic
-                               acid, CH<sub>3</sub>COOH that typically 
-                               is 4-8% w/v. Propose a set of conditions 
-                               that will allow you to determine the 
-                               concentration of acetic acid in samples 
-                               of vinegar using NaOH as the titrant.")),
+                 helpText(HTML(
+                  "<b>Problem 2.</b> The vinegar in your kitchen is a 
+                  dilute solution of acetic acid, CH<sub>3</sub>COOH 
+                  that typically is 4-8% w/v. Propose a set of conditions 
+                  that will allow you to determine the concentration of 
+                  acetic acid in samples of vinegar using NaOH as the 
+                  titrant.")),
                  br(),
-                 helpText(HTML("<b>Problem 3.</b> Household cleaners,
-                               such as Windex, typically are dilute 
-                               solutions of 5-10% w/v NH<sub>3</sub>. 
-                               Propose a set of conditions that will 
-                               allow you to determine the concentration 
-                               of ammonia in samples of a household 
-                               cleaner using HCl as the titrant.")),
+                 helpText(HTML(
+                  "<b>Problem 3.</b> Household cleaners, such as Windex, 
+                  typically are dilute solutions of 5-10% w/v NH<sub>3</sub>. 
+                  Propose a set of conditions that will allow you to 
+                  determine the concentration of ammonia in samples of 
+                  a household cleaner using HCl as the titrant.")),
                  br(),
-                 helpText(HTML("<b>Problem 4.</b> Suppose you have an
-                               impure sample of tartaric acid (80% < 
-                               purity < 95%) and that you plan to determine
-                               its purity by titrating it with a 
-                               standard solution of NaOH. Propose a set
-                               of conditions that will allow you to
-                               determine the purity of your sample of 
-                               tartaric acid.")),
+                 helpText(HTML(
+                  "<b>Problem 4.</b> Suppose you have an impure sample 
+                  of tartaric acid 
+                  (C<sub>6</sub>H<sub>6</sub>O<sub>6</sub>; 
+                  80% < purity < 95%) and that you 
+                  plan to determine its purity by titrating it with a 
+                  standard solution of NaOH. Propose a set of conditions 
+                  that will allow you to determine the purity of your 
+                  sample of tartaric acid.")),
                  br(),
-                 helpText(HTML("<b>Problem 5.</b> Commercial washing
-                               soda is 30-40% w/w 
-                               Na<sub>2</sub>CO<sub>3</sub>. Propose
-                               a set of conditions that will allow you
-                               to determine the purity of washing 
-                               soda using HCl as the titrant.")),
+                 helpText(HTML(
+                  "<b>Problem 5.</b> Commercial washing soda is 30-40% w/w 
+                  Na<sub>2</sub>CO<sub>3</sub>. Propose a set of 
+                  conditions that will allow you to determine the purity 
+                  of washing soda using HCl as the titrant.")),
                  br(),
-                 helpText(HTML("<b>Problem 6.</b> Propose a set of 
-                               conditions that will allow you to 
-                               determine the concentration of acetic
-                               acid and the concentration of ammonium 
-                               chloride in a sample using NaOH as the 
-                               titrant. Assume that the concentration 
-                               of acetic acid is in the range 
-                               0.20-0.40 M and that the concentration 
-                               of piperidine is in the range 0.50-0.70 M."))
+                 helpText(HTML(
+                  "<b>Problem 6.</b> Propose a set of conditions that 
+                  will allow you to determine the concentration of acetic
+                  acid and the concentration of ammonium chloride in a 
+                  sample using NaOH as the titrant. Assume that the 
+                  concentration of acetic acid is in the range 
+                  0.20-0.40 M and that the concentration of piperidine 
+                  is in the range 0.50-0.70 M."))
                )
              ),
              fluidRow(

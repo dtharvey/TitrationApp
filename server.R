@@ -57,14 +57,21 @@ shinyServer(function(input, output) {
   })
   
   output$plot_1a = renderPlot({
-    if (input$radio_1a == "Strong Acid") {
+    if (input$radio_1a == "strong acid") {
+      if (input$checkbox_1a == TRUE){
       out = sa_sb(conc.acid = input$slider_1a, 
-                  conc.base = input$slider_1b, 
+                  conc.base = input$slider_1a, 
                   vol.acid = input$slider_1d, 
                   plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = sa_sb(conc.acid = input$slider_1a, 
+                    conc.base = input$slider_1b, 
+                    vol.acid = input$slider_1d, 
+                    plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      }
       plot(out, xlim = c(0, xlim_1()), ylim = c(0, 14), 
            xaxp = c(0, xlim_1(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
         ind.color = colorRampPalette(
           colors = c(acidColor[ind_1()], baseColor[ind_1()]),
@@ -75,19 +82,19 @@ shinyServer(function(input, output) {
         wx = xlim_1(), wy = baseLimit[ind_1()] - 
           acidLimit[ind_1()], col = ind.color)
       grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
-      # text(x = 2, y = c(13, 12, 11), 
-      #      labels = c(paste("[titrant] =", input$slider_1b, "(M)"),
-      #                 paste("[analyte] =", input$slider_1a, "(M)"),
-      #                 paste("initial volume =", input$slider_1d, "(mL)")
-      #                 ), pos = 4)
     } else {
-      out = sb_sa(conc.acid = input$slider_1b, 
+      if (input$checkbox_1a == TRUE){
+      out = sb_sa(conc.acid = input$slider_1a, 
                   conc.base = input$slider_1a,
                   vol.base = input$slider_1d, 
                   plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      } else {out = sb_sa(conc.acid = input$slider_1b, 
+                          conc.base = input$slider_1a,
+                          vol.base = input$slider_1d, 
+                          plot = FALSE, eqpt = FALSE, overlay = FALSE)}
       plot(out, xlim = c(0, xlim_1()), ylim = c(0, 14), 
            xaxp = c(0, xlim_1(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
       ind.color = colorRampPalette(
         colors = c(acidColor[ind_1()], baseColor[ind_1()]),
@@ -151,14 +158,21 @@ shinyServer(function(input, output) {
   })
   
   output$plot_2a = renderPlot({
-    if (input$radio_2a == "Weak Acid") {
+    if (input$radio_2a == "weak acid") {
+      if (input$checkbox_2a == TRUE) {
     out = wa_sb(conc.acid = input$slider_2a, 
-                conc.base = input$slider_2b, 
+                conc.base = input$slider_2a, 
           pka = input$slider_2c, vol.acid = input$slider_2d, 
           plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = wa_sb(conc.acid = input$slider_2a, 
+                    conc.base = input$slider_2b, 
+                    pka = input$slider_2c, vol.acid = input$slider_2d, 
+                    plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      }
     plot(out, xlim = c(0, xlim_2()), ylim = c(0, 14), 
          xaxp = c(0, xlim_2(), 10),
-         xaxs = "i", yaxs = "i", type = "l", lwd = 2, col = "blue", 
+         xaxs = "i", yaxs = "i", type = "l", lwd = 3, col = "black", 
          xlab = "volume of titrant (mL)", ylab = "pH")
     ind.color = colorRampPalette(
       colors = c(acidColor[ind_2()], baseColor[ind_2()]),
@@ -170,13 +184,20 @@ shinyServer(function(input, output) {
         acidLimit[ind_2()], col = ind.color)
     grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
     } else {
-      out = wb_sa(conc.acid = input$slider_2b, 
+      if (input$checkbox_2a == TRUE) {
+      out = wb_sa(conc.acid = input$slider_2a, 
                   conc.base = input$slider_2a,
             pka = 14 - input$slider_2c, vol.base = input$slider_2d, 
             plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = wb_sa(conc.acid = input$slider_2b, 
+                    conc.base = input$slider_2a,
+                    pka = 14 - input$slider_2c, vol.base = input$slider_2d, 
+                    plot = FALSE, eqpt = FALSE, overlay = FALSE)
+      }
       plot(out, xlim = c(0, xlim_2()), ylim = c(0, 14), 
            xaxp = c(0, xlim_2(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
       ind.color = colorRampPalette(
         colors = c(acidColor[ind_2()], baseColor[ind_2()]),
@@ -240,15 +261,23 @@ shinyServer(function(input, output) {
   })
   
   output$plot_3a = renderPlot({
-    if (input$radio_3a == "Weak Acid") {
+    if (input$radio_3a == "weak acid") {
+      if (input$checkbox_3a == TRUE) {
         out = diwa_sb(conc.acid = input$slider_3a, 
-                      conc.base = input$slider_3b,
+                      conc.base = input$slider_3a,
                   pka1 = input$slider_3c[1], pka2 = input$slider_3c[2],
                   vol.acid = input$slider_3d, plot = FALSE, 
                   eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = diwa_sb(conc.acid = input$slider_3a, 
+                      conc.base = input$slider_3b,
+                      pka1 = input$slider_3c[1], pka2 = input$slider_3c[2],
+                      vol.acid = input$slider_3d, plot = FALSE, 
+                      eqpt = FALSE, overlay = FALSE)
+      } 
         plot(out, xlim = c(0, xlim_3()), ylim = c(0, 14), 
              xaxp = c(0, xlim_3(), 10), xaxs = "i", yaxs = "i", type = "l", 
-             lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+             lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
              ylab = "pH")
         ind.color = colorRampPalette(
           colors = c(acidColor[ind_3()], baseColor[ind_3()]),
@@ -260,15 +289,24 @@ shinyServer(function(input, output) {
             acidLimit[ind_3()], col = ind.color)
         grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
     } else {
-      out = diwb_sa(conc.acid = input$slider_3b, 
+      if (input$checkbox_3a == TRUE) {
+      out = diwb_sa(conc.acid = input$slider_3a, 
                     conc.base = input$slider_3a,
                     pka1 = 14 - input$slider_3c[2], 
                     pka2 = 14 - input$slider_3c[1],
                     vol.base = input$slider_3d, plot = FALSE, 
                     eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = diwb_sa(conc.acid = input$slider_3b, 
+                      conc.base = input$slider_3a,
+                      pka1 = 14 - input$slider_3c[2], 
+                      pka2 = 14 - input$slider_3c[1],
+                      vol.base = input$slider_3d, plot = FALSE, 
+                      eqpt = FALSE, overlay = FALSE)
+      }
       plot(out, xlim = c(0, xlim_3()), ylim = c(0, 14), 
            xaxp = c(0, xlim_3(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
       ind.color = colorRampPalette(
         colors = c(acidColor[ind_3()], baseColor[ind_3()]),
@@ -332,16 +370,25 @@ shinyServer(function(input, output) {
   })
   
   output$plot_4a = renderPlot({
-    if (input$radio_4a == "Weak Acids") {
+    if (input$radio_4a == "weak acids"){
+      if (input$checkbox_4a == TRUE) {
       out = wamix_sb(conc.acid1 = input$slider_4a, 
                      conc.acid2 = input$slider_4e,
-                     conc.base = input$slider_4b,
+                     conc.base = input$slider_4a,
                     pka1 = input$slider_4c, pka2 = input$slider_4f,
                     vol.acid = input$slider_4d, plot = FALSE, 
                     eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = wamix_sb(conc.acid1 = input$slider_4a, 
+                       conc.acid2 = input$slider_4e,
+                       conc.base = input$slider_4b,
+                       pka1 = input$slider_4c, pka2 = input$slider_4f,
+                       vol.acid = input$slider_4d, plot = FALSE, 
+                       eqpt = FALSE, overlay = FALSE)
+      }
       plot(out, xlim = c(0, xlim_4()), ylim = c(0, 14), 
            xaxp = c(0, xlim_4(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
       ind.color = colorRampPalette(
         colors = c(acidColor[ind_4()], baseColor[ind_4()]),
@@ -353,16 +400,26 @@ shinyServer(function(input, output) {
           acidLimit[ind_4()], col = ind.color)
       grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
     } else {
-      out = wbmix_sa(conc.acid = input$slider_4b, 
+      if (input$checkbox_4a == TRUE ){
+      out = wbmix_sa(conc.acid = input$slider_4a, 
                      conc.base1 = input$slider_4a,
                      conc.base2 = input$slider_4e,
                     pka1 = 14 - input$slider_4c, 
                     pka2 = 14 - input$slider_4f,
                     vol.base = input$slider_4d, plot = FALSE, 
                     eqpt = FALSE, overlay = FALSE)
+      } else {
+        out = wbmix_sa(conc.acid = input$slider_4b, 
+                       conc.base1 = input$slider_4a,
+                       conc.base2 = input$slider_4e,
+                       pka1 = 14 - input$slider_4c, 
+                       pka2 = 14 - input$slider_4f,
+                       vol.base = input$slider_4d, plot = FALSE, 
+                       eqpt = FALSE, overlay = FALSE)
+      }
       plot(out, xlim = c(0, xlim_4()), ylim = c(0, 14), 
            xaxp = c(0, xlim_4(), 10), xaxs = "i", yaxs = "i", type = "l", 
-           lwd = 2, col = "blue", xlab = "volume of titrant (mL)", 
+           lwd = 3, col = "black", xlab = "volume of titrant (mL)", 
            ylab = "pH")
       ind.color = colorRampPalette(
         colors = c(acidColor[ind_4()], baseColor[ind_4()]),
