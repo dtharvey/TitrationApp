@@ -8,8 +8,8 @@ shinyUI(fluidPage(
   withMathJax(),
   tags$style(HTML("
                   p {
-                  font-size: 18px;
-                  font-weight: bold;
+                  font-size: 16px;
+                  # font-weight: bold;
                   }
   
                   h4 {
@@ -45,36 +45,36 @@ shinyUI(fluidPage(
                     contains the analyte, and the volume of titrant 
                     needed to reach the stoichiometric equivalence point 
                     is determined using a visual indicator whose change 
-                    in color signals the titration's end point or by 
+                    in color signals the titration's end point, or by 
                     monitoring the pH of the reaction mixture; if all 
                     is well, the difference between the experimental 
                     end point and the theoretical equivalence point is 
                     sufficiently small that it does not affect the 
                     accuracy of the analysis. Because we know the 
-                    concentration and volume of titrant, we can determine
-                    the moles of analyte in the original sample. In this 
-                    learning module we take a closer look at acid-base 
-                    titrimetry using the following series of 
-                    investigations:</p>"),
+                    concentration and the volume of titrant, we can 
+                    determine the moles of analyte in the original 
+                    sample. In this learning module we take a closer 
+                    look at acid-base titrimetry using the following 
+                    series of investigations:</p>"),
                HTML("<ul> 
                     <li> 
-                    <h4>Investigation 1: Titration of a Strong Acid
-                      or a Strong Base</h4>
+                    <p>Investigation 1: Titration of a Strong Acid
+                      or a Strong Base</p>
                     </li>
                     <li> 
-                    <h4>Investigation 2: Titration of a Monoprotic
-                      Weak Acid or Weak Base</h4>
+                    <p>Investigation 2: Titration of a Monoprotic
+                      Weak Acid or Weak Base</p>
                     </li>
                     <li> 
-                    <h4>Investigation 3: Titration of a Diprotic Weak
-                      Acid or Weak Base</h4>
+                    <p>Investigation 3: Titration of a Diprotic Weak
+                      Acid or Weak Base</p>
                     </li>
                     <li> 
-                    <h4>Investigation 4: Titration of a Mixture of Weak
-                      Acids or Weak Bases</h4>
+                    <p>Investigation 4: Titration of a Mixture of Weak
+                      Acids or Weak Bases</p>
                     <li>
-                    <h4>Investigation 5: Practice Problems—Designing
-                      Titrations</h4>
+                    <p>Investigation 5: Practice Problems—Designing
+                      Titrations</p>
                     </li>
                     </ul>"),
                HTML("<p>In the first four investigations you will explore
@@ -85,13 +85,8 @@ shinyUI(fluidPage(
                     values. You also will consider the utility of 
                     acid-base indicators in signaling a 
                     titration's end point. The last investigation provides
-                    you with the opportunity to design several titrations 
-                    to solve particular analytical problems.</p>"),
-               HTML("<p>For a more detailed discussion of the topics
-                    covered in this learning module, you can consult 
-                    Chapter 9 of <em>Analytical Chemistry 2.0</em>, 
-                    which is available using this 
-                    <a href = http://bit.ly/1r3wJoz>link</a>.</p>")
+                    you with the opportunity to design titrations 
+                    to solve particular analytical problems.</p>")
              )
             ),
     
@@ -105,7 +100,7 @@ shinyUI(fluidPage(
                  helpText(
                   "For the titration of a strong acid analyte or a 
                   strong base analyte, the shape and the position of the 
-                  resulting titration curve is a function of three 
+                  titration curve is a function of three 
                   variables: the analyte's initial concentration, the 
                   initial volume of the analyte's solution, and the 
                   titrant's concentration."
@@ -116,10 +111,10 @@ shinyUI(fluidPage(
                   a visual indicator and to control the range of 
                   titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
                   the resulting titration curve is shown on the far 
-                  right. As you consider the effect of each variable on 
+                  right. As you consider the effect of a variable on 
                   the titration curve, be sure to explore fully the range 
-                  of possible values for each variable and the 
-                  interaction between the variables."
+                  of its possible values and its interaction with 
+                  other variables."
                  )
                ),
                column(
@@ -205,7 +200,7 @@ shinyUI(fluidPage(
                  helpText(
                   "For the titration of a monoprotic weak acid analyte 
                   or  the titration of a monoprotic weak base analyte, 
-                  the shape and the position of the resulting titration 
+                  the shape and the position of the titration 
                   curve is a function of four variables: the analyte's 
                   initial concentration, the initial volume of the analyte's
                   solution, the concentration of the titrant, and the 
@@ -218,10 +213,10 @@ shinyUI(fluidPage(
                   a visual indicator and to control the range of 
                   titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
                   the resulting titration curve is shown on the far 
-                  right. As you consider the effect of each variable on 
+                  right. As you consider the effect of a variable on 
                   the titration curve, be sure to explore fully the range 
-                  of possible values for each variable and the 
-                  interaction between the variables."
+                  of its possible values and its interaction with 
+                  other variables."
                  )
                  ),
                column(
@@ -314,23 +309,23 @@ shinyUI(fluidPage(
                  h4("Titration of a Diprotic Weak Acid or Weak Base"),
                  helpText(
                   "For the titration of a diprotic weak acid or a 
-                  diprotic weak, the shape and the position 
+                  diprotic weak base, the shape and the position 
                   of the resulting titration curve is a function of 
                   five variables: the analyte's initial concentration, 
                   the initial volume of the analyte's solution, the 
                   analyte's two \\(\\textrm{p}{K}_{a}\\) values or its
                   two \\(\\textrm{p}{K}_{b}\\) values, and the 
-                  titrant's concentration"),
+                  titrant's concentration."),
                  helpText(
                   "The controls below allow you to define the conditions 
                   for the titration, including the option to include 
                   a visual indicator and to control the range of 
                   titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
                   the resulting titration curve is shown on the far 
-                  right. As you consider the effect of each variable on 
+                  right. As you consider the effect of a variable on 
                   the titration curve, be sure to explore fully the range 
-                  of possible values for each variable and the 
-                  interaction between the variables."
+                  of its possible values and its interaction with 
+                  other variables."
                   )
                  ),
                column(
@@ -429,14 +424,14 @@ shinyUI(fluidPage(
                  h4("Titration of a Mixture of Weak Acids or Weak Bases"),
                  helpText(
                   "For the titration of a mixture that contains two 
-                  monoprotic weak acids two monoprotic weak bases, the 
-                  shape and the position of the resulting titration 
+                  monoprotic weak acids or two monoprotic weak bases, the 
+                  shape and the position of the titration 
                   curve is a function of six variables: the first 
                   analyte's and the second analyte's concentration, the 
                   initial volume of the solution that contains the two
                   analytes, the p\\({K}_{a}\\) values or the 
                   p\\({K}_{b}\\) for the two analytes, and the 
-                  titrant's concentration"
+                  titrant's concentration."
                  ),
                  helpText(
                   "The controls below allow you to define the conditions 
@@ -444,10 +439,10 @@ shinyUI(fluidPage(
                   a visual indicator and to control the range of 
                   titrant volumes to plot on the \\(\\textit{x}\\)-axis; 
                   the resulting titration curve is shown on the far 
-                  right. As you consider the effect of each variable on 
+                  right. As you consider the effect of a variable on 
                   the titration curve, be sure to explore fully the range 
-                  of possible values for each variable and the 
-                  interaction between the variables."
+                  of its possible values and its interaction with 
+                  other variables."
                 )
                ),
                column(
@@ -579,7 +574,7 @@ shinyUI(fluidPage(
                   in water but fully soluble in acid. One way to 
                   determine the purity of guanine is to add a known 
                   amount to an excess of HCl and to then determine the 
-                  amount of unreacated HCl by titrating it with a
+                  amount of unreacted HCl by titrating it with a
                   standard solution of NaOH. Propose a set of conditions 
                   that will allow you to determine the purity of guanine;
                   you may assume that the samples have a purity that 
@@ -629,7 +624,62 @@ shinyUI(fluidPage(
              fluidRow(
                
              )
-    )
+    ),
+
+  tabPanel("Review",
+           column(
+             width = 6,
+             h4("Summary"),
+             HTML("<p>Having completed this learning module, you should 
+                  have a good intuitive feel for how the shape, and, 
+                  therefore, the practical usefulness of a 
+                  titration curve depends on the relative acid/base 
+                  strength of the analyte and the titrant, the relative 
+                  concentrations of the analyte and the titrant, and 
+                  the volume of the sample. You also should have a 
+                  good intuitive feel for how to design an acid-base 
+                  titration to solve a particular analytical problem."),
+             h4("Additional Resources"),
+             HTML("<p>You will find a more detailed discussion of the 
+                  topics covered in this learning module in 
+                  Chapter 9 of <em>Analytical Chemistry 2.0</em>, 
+                  which is available using this 
+                  <a href = http://bit.ly/1r3wJoz>link</a>.</p>"),
+             HTML("<p>The titration curves in this learning module 
+                  were generated using the titrationCurves package, 
+                  which is available through 
+                  <a href = https://cran.r-project.org/web/packages/titrationCurves/index.html                   >CRAN</a> or through 
+                  <a href = https://github.com/dtharvey/TitrationApp>Github</a>; 
+                  this package includes functions for generating a wide 
+                  variety of titration curves, including acid-base 
+                  titrations, complexation titrations, oxidation-
+                  reduction titrations (using an oxidizing agent as 
+                  the titrant), and precipitation titrations. Functions 
+                  are included for plotting both normal, first 
+                  derivative, and second derivative titration curves. 
+                  The figure to the right, for example, shows the first 
+                  derivative and the second derivative titration curves for the 
+                  titration of 50 mL of a diprotic weak acid with a  
+                  concentration of 0.10 M and p<em>K<sub>b</sub></em> 
+                  values of 5 and 9 using a strong base titrant with a 
+                  concentration of 0.10 M.</p>"),
+             HTML("<p>A robust acid-base titration simulator written 
+                  in Excel is available at 
+                  <a href = http://www.iq.usp.br/gutz/Curtipot_.html>
+                  CurTiPot</a>. In addition to simulating acid-base 
+                  titration curves, the program also generates 
+                  distribution diagrams and buffer plots.</p>")
+           ),
+           column(
+             width = 6,
+             br(),
+             br(),
+             br(),
+             br(),
+             br(),
+             plotOutput("plot_reva")
+           )
+           )
     
 # place new panels here
     

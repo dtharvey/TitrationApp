@@ -432,6 +432,11 @@ shinyServer(function(input, output) {
       grid(nx = 10, ny = 7, lwd = 1, col = "wheat4")
     }
   })
+  
+  output$plot_reva = renderPlot({
+    out = diwa_sb()
+    derivative(out)
+  })
 
 # end of shiny server function
   
