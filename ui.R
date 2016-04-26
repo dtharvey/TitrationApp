@@ -9,7 +9,6 @@ shinyUI(fluidPage(
   tags$style(HTML("
                   p {
                   font-size: 16px;
-                  # font-weight: bold;
                   }
   
                   h4 {
