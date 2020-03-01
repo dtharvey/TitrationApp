@@ -1,7 +1,8 @@
 ---
-title: "Designing Acid-Base Titrations: Instructor's Guide"
+title: 'Designing Acid-Base Titrations: Instructor''s Guide'
 author: "David T. Harvey"
-output: 
+output:
+  word_document: default
   pdf_document:
     fig_height: 3.5
     fig_width: 4.5
